@@ -19,7 +19,7 @@ class Auth:
     SECRET_KEY = settings.secret_key
     ALGORITHM = settings.algorithm
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/api/auth/login')
-    r = redis.Redis(host=settings.redis_host, port=settings.postgres_port, db=0)
+    # r = redis.Redis(host=settings.redis_host, port=settings.postgres_port, db=0)
 
     def verify_password(self, plain_password, hashed_password):
         return self.pwd_context.verify(plain_password, hashed_password)
@@ -72,15 +72,17 @@ class Auth:
         except JWTError as e:
             raise credentials_exception
 
-        user = self.r.get(f'user:{email}')
+        # user_key = f'user{email}'
+        # user_data = await self.
+        #
+        # if user_data is None:
+        user = await repository_users.get_user_by_email(email, db)
         if user is None:
-            user = await repository_users.get_user_by_email(email, db)
-            if user is None:
-                raise credentials_exception
-            await self.r.set(f'user:{email}', pickle.dumps(user))
-            await self.r.expire(f'user:{email}', 900)
-        else:
-            user = pickle.loads(user)
+            raise credentials_exception
+    #     user_data = pickle.dumps(user)
+    #     await self.r.setex(user_key, 900, user_data)
+    # else:
+    #     user = pickle.loads(user_data)
         return user
 
     def create_email_token(self, data: dict):
