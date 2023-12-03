@@ -8,7 +8,7 @@ refresh_token = None
 signup_data = {
     'username': fake.first_name(),
     'email': fake.email(),
-    'password': fake.password(lenght=random.randint(8, 16))
+    'password': fake.password(length=random.randint(8, 16))
 }
 
 
