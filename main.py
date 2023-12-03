@@ -1,6 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_limiter import FastAPILimiter
 
 from src.routes import contacts, auth, users
 
@@ -23,4 +22,10 @@ app.include_router(users.router, prefix='/api')
 
 @app.get('/')
 def read_root():
+    """
+    The read_root function returns a dictionary with the key 'message' and value 'Hello'.
+
+    :return: A dictionary
+    :doc-author: Trelent
+    """
     return {'message': 'Hello'}
